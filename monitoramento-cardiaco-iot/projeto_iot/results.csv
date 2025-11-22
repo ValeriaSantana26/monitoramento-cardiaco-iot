@@ -1,0 +1,13 @@
+medicao,sensor_ou_atuador,tempo_ms
+1,AD8232 -> MQTT,112
+2,AD8232 -> MQTT,108
+3,AD8232 -> MQTT,115
+4,AD8232 -> MQTT,110
+1,DS18B20 -> MQTT,94
+2,DS18B20 -> MQTT,97
+3,DS18B20 -> MQTT,100
+4,DS18B20 -> MQTT,95
+1,Comando -> LED/Buzzer,63
+2,Comando -> LED/Buzzer,58
+3,Comando -> LED/Buzzer,60
+4,Comando -> LED/Buzzer,61
