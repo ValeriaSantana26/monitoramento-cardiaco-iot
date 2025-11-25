@@ -1,4 +1,0 @@
-INSTRUCTABLES. Wireless Heartbeat Monitor – Part I. 2019.
-UBIDOTS. How to build an ECG system using AD8232, ESP32 and Ubidots. 2020.
-FRITZING. Fritzing Software, 2024.
-MQTT. OASIS Standard. Disponível em: http://mqtt.org.
