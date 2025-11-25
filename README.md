@@ -1,126 +1,155 @@
-Projeto IoT – Sistema de Monitoramento com MQTT
+# Projeto IoT – Sistema de Monitoramento com MQTT
 
-Este repositório contém o código-fonte, diagramas, documentação e arquivos utilizados no desenvolvimento do projeto final da disciplina de Internet das Coisas (IoT). O sistema implementa a leitura de sensores, acionamento de atuadores e comunicação com a internet via protocolo MQTT.
+Este repositório contém o código-fonte, diagramas, documentação e imagens utilizadas no desenvolvimento do projeto final da disciplina de Internet das Coisas (IoT). O sistema realiza monitoramento em tempo real utilizando sensor, atuador e comunicação via protocolo MQTT.
 
-Objetivo do Projeto
+---
+
+## Objetivo do Projeto
 
 Implementar um sistema IoT capaz de:
 
-Monitorar dados por meio de um sensor.
+- Monitorar dados biométricos por meio de sensores.
+- Acionar um atuador conforme comandos MQTT.
+- Publicar e receber informações através de um broker MQTT.
+- Exibir dados em tempo real em um dashboard.
+- Documentar hardware, software e integrações utilizadas.
 
-Acionar um atuador conforme comandos recebidos.
+---
 
-Enviar e receber mensagens através de um broker MQTT.
+## Hardware Utilizado
 
-Comunicar-se via internet utilizando o protocolo MQTT.
+- NodeMCU ESP8266  
+- Sensor (definido no artigo)  
+- Atuador (LED e/ou Buzzer)  
+- Protoboard  
+- Jumpers  
+- Cabo USB  
+- Fonte 5V  
 
-Apresentar documentação completa, código-fonte e vídeo de demonstração.
+---
 
-Hardware Utilizado
+## Comunicação via MQTT
 
-NodeMCU ESP8266
+### **Tópicos utilizados**
 
-Sensor (modelo utilizado descrito no artigo)
+**Publicação:**
+- `/monitoramento/sensor`
+- `/monitoramento/status`
 
-Atuador (LED, buzzer ou relé)
+**Assinatura:**
+- `/monitoramento/controle`
 
-Protoboard
+---
 
-Jumpers
+## Como Executar o Projeto
 
-Fonte 5V
+1. Instale a Arduino IDE ou o PlatformIO.
+2. Instale as bibliotecas:
+   - `ESP8266WiFi`
+   - `PubSubClient`
+   - Biblioteca do sensor utilizado
+3. Configure o Wi-Fi e o MQTT no código.
+4. Conecte o NodeMCU via USB.
+5. Carregue o código para a placa.
+6. Abra o Monitor Serial para verificar a conexão com a rede e o MQTT.
 
-Cabo USB
+### **Configurações Que Devem Ser Editadas no Código**
 
-Comunicação via MQTT
-Tópicos utilizados:
-
-Publish:
-
-/projeto_iot/sensor
-
-/projeto_iot/status
-
-Subscribe:
-
-/projeto_iot/controle
-
-Como Executar o Projeto
-
-Instale a Arduino IDE ou PlatformIO.
-
-Instale as seguintes bibliotecas:
-
-ESP8266WiFi
-
-PubSubClient
-
-Biblioteca correspondente ao sensor utilizado
-
-Edite no código:
-
+```cpp
+// Wi-Fi
 const char* ssid = "SUA_REDE";
 const char* password = "SUA_SENHA";
+
+// MQTT
 const char* mqtt_server = "BROKER_MQTT";
+const char* mqtt_user = "";       // opcional
+const char* mqtt_password = "";   // opcional
+
+// Pinos do hardware
+const int pino_sensor = A0;   // leitura do sensor
+const int pino_led = D1;      // LED (atuador)
+const int pino_buzzer = D2;   // buzzer (atuador)
+```
+
+---
+
+## Arquitetura do Sistema
+
+O sistema utiliza uma arquitetura baseada em três camadas: **sensoriamento**, **processamento** e **comunicação MQTT**.
+
+### **1. Camada de Sensoriamento**
+Coleta de dados por meio do sensor configurado no projeto.
+
+### **2. Camada de Processamento – NodeMCU ESP8266**
+Responsável por:
+
+- Ler o sensor
+- Processar os valores
+- Enviar dados ao broker MQTT
+- Assinar comandos MQTT
+- Acionar LED/Buzzer
+
+### **3. Camada de Comunicação – MQTT**
+Protocolo leve baseado em *publish/subscribe*.
+
+### **Fluxo da Arquitetura**
+
+```
++------------------+
+|     Sensor       |
++--------+---------+
+         |
+         v
++------------------+
+| NodeMCU ESP8266  |
+| Processamento     |
+| WiFi + MQTT       |
++--------+---------+
+         |
+   Publica/Recebe
+         |
+         v
++------------------+
+|   Broker MQTT    |
++--------+---------+
+         |
+         v
++--------------------------+
+| Dashboard / Aplicação   |
++--------------------------+
+```
+
+---
+
+## Testes Realizados
+
+Foram avaliados:
+
+- Tempo entre leitura do sensor e publicação MQTT.
+- Tempo entre comando MQTT e acionamento do atuador.
+- Quatro medições para cada categoria.
+
+Os dados completos estão no artigo em PDF.
+
+---
 
 
-Envie o código para o NodeMCU.
+## Vídeo de Demonstração
 
-Abra o Monitor Serial para verificar conexão com WiFi e MQTT.
+🔗 **Inserir link do vídeo (não listado no YouTube)**  
+**[INSERIR LINK AQUI]**
 
-Arquitetura do Sistema
-Sensor → NodeMCU → Broker MQTT → Aplicação
-Atuador ← NodeMCU ← Broker MQTT ← Comandos
+---
 
-Testes Realizados
+## Artigo Final (PDF)
 
-Foram medidos:
+🔗 **Inserir link ou fazer upload do arquivo PDF**  
+**[INSERIR LINK AQUI]**
 
-Tempo entre leitura do sensor e publicação no broker.
+---
 
-Tempo entre comando MQTT e acionamento do atuador.
+## Autora
 
-Quatro medições foram feitas, conforme tabela no artigo final.
+**Valéria Santana**   
+Universidade Presbiteriana Mackenzie
 
-Resultados
-
-Imagens da montagem.
-
-Diagrama Fritzing.
-
-Fluxograma de funcionamento.
-
-Capturas da comunicação MQTT.
-
-Gráficos dos tempos de resposta.
-
-Vídeo de Demonstração
-
-Link do vídeo no YouTube (não listado):
-[INSERIR LINK DO VÍDEO AQUI]
-
-Artigo Final (PDF)
-
-Link para o artigo completo (ABNT):
-[INSERIR LINK DO PDF AQUI]
-
-Repositório
-
-Este repositório contém:
-
-Código-fonte
-
-Diagramas Fritzing
-
-Fluxograma
-
-Imagens dos testes
-
-PDF final do artigo
-
-Documentação completa do hardware, software e MQTT
-
-Autora
-
-Valéria Santana (Fênix)
-Projeto desenvolvido para a disciplina de Internet das Coisas (IoT).
