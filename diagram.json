@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "author": "Amar Ayoub",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-breadboard-half", "id": "bb1", "top": 246.6, "left": 98.8, "attrs": {} },
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": -48, "left": 206.44, "attrs": {} },
+    {
+      "type": "board-ssd1306",
+      "id": "oled1",
+      "top": 79.94,
+      "left": 67.43,
+      "attrs": { "i2cAddress": "0x3c" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": -36,
+      "left": 376.2,
+      "attrs": { "volume": "0.1" }
+    },
+    { "type": "chip-pulse", "id": "pulse1", "top": 1.02, "left": -14.4, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:3V3", "oled1:VCC", "red", [ "h0.15", "v-96", "h-230.4" ] ],
+    [ "esp:GND.2", "oled1:GND", "black", [ "v-105.6", "h-326.4" ] ],
+    [ "esp:GND.2", "bz1:1", "black", [ "v0", "h57.6", "v67.2" ] ],
+    [ "esp:26", "oled1:SCL", "green", [ "h-86.25" ] ],
+    [ "esp:25", "oled1:SDA", "green", [ "v0", "h-76.65" ] ],
+    [ "esp:4", "bz1:2", "green", [ "h0" ] ],
+    [ "esp:GND.2", "pulse1:GND", "black", [ "v-67.2", "h-364.8" ] ],
+    [ "esp:3V3", "pulse1:VCC", "red", [ "h-259.05", "v38.4" ] ],
+    [ "esp:34", "pulse1:PULSE", "green", [ "h-86.25", "v-9.6" ] ]
+  ],
+  "dependencies": {}
+}
