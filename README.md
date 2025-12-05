@@ -1,155 +1,164 @@
-# Projeto IoT – Sistema de Monitoramento com MQTT
+<h1 align="center">🫀 Sistema de Monitoramento Cardíaco IoT com ESP32</h1>
+<p align="center"><b>Monitoramento de Batimentos Cardíacos (PPG), Nível de Estresse (GSR), Display OLED, Buzzer e Envio MQTT</b></p>
 
-Este repositório contém o código-fonte, diagramas, documentação e imagens utilizadas no desenvolvimento do projeto final da disciplina de Internet das Coisas (IoT). O sistema realiza monitoramento em tempo real utilizando sensor, atuador e comunicação via protocolo MQTT.
+<hr>
 
----
+<h2>📌 Descrição do Projeto</h2>
+<p>
+Este projeto utiliza um <b>ESP32</b> para monitorar sinais fisiológicos — como batimentos cardíacos e nível de estresse — 
+através de sensores PPG e GSR. As informações são exibidas em um <b>display OLED</b>, alertas sonoros são emitidos por um <b>buzzer</b>, 
+e todos os dados são enviados via <b>MQTT</b> para um servidor, dashboard, celular ou aplicação IoT.
+</p>
 
-## Objetivo do Projeto
+<hr>
 
-Implementar um sistema IoT capaz de:
+<h2>📦 Componentes Utilizados</h2>
+<ul>
+  <li>ESP32 DevKit V1</li>
+  <li>Sensor PPG (Pulse Sensor)</li>
+  <li>Sensor GSR (Galvanic Skin Response)</li>
+  <li>Display OLED I2C (SSD1306 – 128x64)</li>
+  <li>Buzzer</li>
+  <li>Protoboard e jumpers</li>
+</ul>
 
-- Monitorar dados biométricos por meio de sensores.
-- Acionar um atuador conforme comandos MQTT.
-- Publicar e receber informações através de um broker MQTT.
-- Exibir dados em tempo real em um dashboard.
-- Documentar hardware, software e integrações utilizadas.
+<hr>
 
----
+<h2>🧩 Funcionalidades</h2>
+<ul>
+  <li>✔ Leitura de batimentos cardíacos (BPM)</li>
+  <li>✔ Cálculo de nível de estresse com base no GSR</li>
+  <li>✔ Exibição em tempo real no OLED</li>
+  <li>✔ Alerta sonoro em situações críticas</li>
+  <li>✔ Envio dos valores via MQTT</li>
+  <li>✔ Compatível com Wokwi e ESP32 físico</li>
+</ul>
 
-## Hardware Utilizado
+<hr>
 
-- NodeMCU ESP8266  
-- Sensor (definido no artigo)  
-- Atuador (LED e/ou Buzzer)  
-- Protoboard  
-- Jumpers  
-- Cabo USB  
-- Fonte 5V  
+<h2>🔌 Conexões dos Sensores</h2>
 
----
+<h3>📍 Pulse Sensor (PPG)</h3>
+<ul>
+  <li>Sinal → GPIO 34</li>
+  <li>VCC → 3.3V</li>
+  <li>GND → GND</li>
+</ul>
 
-## Comunicação via MQTT
+<h3>📍 Sensor GSR</h3>
+<ul>
+  <li>Sinal → GPIO 35</li>
+  <li>VCC → 3.3V</li>
+  <li>GND → GND</li>
+</ul>
 
-### **Tópicos utilizados**
+<h3>📍 OLED SSD1306</h3>
+<ul>
+  <li>SDA → GPIO 21</li>
+  <li>SCL → GPIO 22</li>
+  <li>VCC → 3.3V</li>
+  <li>GND → GND</li>
+</ul>
 
-**Publicação:**
-- `/monitoramento/sensor`
-- `/monitoramento/status`
+<h3>📍 Buzzer</h3>
+<ul>
+  <li>Positivo → GPIO 23</li>
+  <li>Negativo → GND</li>
+</ul>
 
-**Assinatura:**
-- `/monitoramento/controle`
+<hr>
 
----
+<h2>📡 Comunicação MQTT</h2>
+<p>Este sistema envia dois tópicos principais via MQTT:</p>
 
-## Como Executar o Projeto
+<pre>
+valeria/bpm
+valeria/stress
+</pre>
 
-1. Instale a Arduino IDE ou o PlatformIO.
-2. Instale as bibliotecas:
-   - `ESP8266WiFi`
-   - `PubSubClient`
-   - Biblioteca do sensor utilizado
-3. Configure o Wi-Fi e o MQTT no código.
-4. Conecte o NodeMCU via USB.
-5. Carregue o código para a placa.
-6. Abra o Monitor Serial para verificar a conexão com a rede e o MQTT.
+<p>Publicado pelo código:</p>
 
-### **Configurações Que Devem Ser Editadas no Código**
+<pre>
+client.publish("valeria/bpm", String(HR).c_str());
+client.publish("valeria/stress", String(stressLevel).c_str());
+</pre>
 
-```cpp
-// Wi-Fi
-const char* ssid = "SUA_REDE";
-const char* password = "SUA_SENHA";
+<hr>
 
-// MQTT
-const char* mqtt_server = "BROKER_MQTT";
-const char* mqtt_user = "";       // opcional
-const char* mqtt_password = "";   // opcional
+<h2>📁 Estrutura do Projeto</h2>
 
-// Pinos do hardware
-const int pino_sensor = A0;   // leitura do sensor
-const int pino_led = D1;      // LED (atuador)
-const int pino_buzzer = D2;   // buzzer (atuador)
-```
+<pre>
+monitoramento-cardiaco-iot/
+│
+├── README.md
+├── sketch.ino
+├── diagram.json
+├── pulse.chip.c
+├── pulse.chip.json
+├── libraries.txt
+└── wokwi-project.txt
+</pre>
 
----
+<hr>
 
-## Arquitetura do Sistema
+<h2>🛠 Bibliotecas Necessárias</h2>
 
-O sistema utiliza uma arquitetura baseada em três camadas: **sensoriamento**, **processamento** e **comunicação MQTT**.
+<ul>
+  <li>Adafruit GFX Library</li>
+  <li>Adafruit SSD1306</li>
+  <li>PubSubClient</li>
+  <li>WiFi</li>
+</ul>
 
-### **1. Camada de Sensoriamento**
-Coleta de dados por meio do sensor configurado no projeto.
+<hr>
 
-### **2. Camada de Processamento – NodeMCU ESP8266**
-Responsável por:
+<h2>🚀 Como Executar</h2>
+<ol>
+  <li>Abra o projeto no VSCode ou Arduino IDE.</li>
+  <li>Compile e envie para o ESP32.</li>
+  <li>Abra seu servidor MQTT e monitore os tópicos.</li>
+</ol>
 
-- Ler o sensor
-- Processar os valores
-- Enviar dados ao broker MQTT
-- Assinar comandos MQTT
-- Acionar LED/Buzzer
+<h3>📡 Tópicos para monitorar:</h3>
 
-### **3. Camada de Comunicação – MQTT**
-Protocolo leve baseado em *publish/subscribe*.
+<pre>
+valeria/bpm
+valeria/stress
+</pre>
 
-### **Fluxo da Arquitetura**
+<hr>
 
-```
-+------------------+
-|     Sensor       |
-+--------+---------+
-         |
-         v
-+------------------+
-| NodeMCU ESP8266  |
-| Processamento     |
-| WiFi + MQTT       |
-+--------+---------+
-         |
-   Publica/Recebe
-         |
-         v
-+------------------+
-|   Broker MQTT    |
-+--------+---------+
-         |
-         v
-+--------------------------+
-| Dashboard / Aplicação   |
-+--------------------------+
-```
+<h2>🧠 Lógica do Funcionamento</h2>
+<ul>
+  <li>Lê o sinal do PPG.</li>
+  <li>Filtra ruídos (filtro mediano).</li>
+  <li>Calcula a frequência cardíaca.</li>
+  <li>Lê o GSR e determina nível de estresse.</li>
+  <li>Mostra BPM e Stress no OLED.</li>
+  <li>Envia tudo via MQTT.</li>
+  <li>Ativa buzzer em caso de alerta.</li>
+</ul>
 
----
+<hr>
 
-## Testes Realizados
+<h2>🖥 Exemplo de Tela</h2>
 
-Foram avaliados:
+<pre>
+BPM: 82
+Stress: Baixo
+Status: Normal
+</pre>
 
-- Tempo entre leitura do sensor e publicação MQTT.
-- Tempo entre comando MQTT e acionamento do atuador.
-- Quatro medições para cada categoria.
+<hr>
 
-Os dados completos estão no artigo em PDF.
+<h2>🌐 Simulação Wokwi</h2>
+<p>Todo o projeto é compatível com o ambiente Wokwi.  
+O arquivo <code>diagram.json</code> contém toda a simulação.</p>
 
----
+<hr>
 
+<h2>👩‍💻 Autora</h2>
+<p><b>Valéria Santana </b>  
+Projeto acadêmico integrando IoT, eletrônica e monitoramento fisiológico.</p>
 
-## Vídeo de Demonstração
-
-🔗 **Inserir link do vídeo (não listado no YouTube)**  
-**[INSERIR LINK AQUI]**
-
----
-
-## Artigo Final (PDF)
-
-🔗 **Inserir link ou fazer upload do arquivo PDF**  
-**[INSERIR LINK AQUI]**
-
----
-
-## Autora
-
-**Valéria Santana**   
-Universidade Presbiteriana Mackenzie
-
+<hr>
